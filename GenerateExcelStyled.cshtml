@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+    var db = Database.Open("Northwind");
+    var sql = "SELECT CustomerID, CompanyName, ContactName, Address, City, Country, Phone FROM Customers";
+    var data = db.Query(sql);
+    var columns = data.First().Columns;
+    Response.AddHeader("Content-disposition", "attachment; filename=report.xls");
+    Response.ContentType = "application/octet-stream";
+}
+<table style="border: 1px solid #a59f9f;">
+    <tr style="font-weight: bold">
+    @foreach(var column in columns){
+        <td style="border: 1px solid #a59f9f;">@column</td>
+    }
+    </tr>
+    @foreach(var row in data){
+        <tr>
+        @foreach(var column in columns){
+            <td style="border: 1px solid #a59f9f;">@row[column]</td>
+        }
+        </tr>
+    }
+</table>

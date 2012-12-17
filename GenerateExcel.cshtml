@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+    var db = Database.Open("Northwind");
+    var sql = "SELECT CustomerID, CompanyName, ContactName, Address, City, Country, Phone FROM Customers";
+    var data = db.Query(sql);
+    var grid = new WebGrid(data, canPage: false, canSort: false);
+    Response.AddHeader("Content-disposition", "attachment; filename=report.xls");
+    Response.ContentType = "application/octet-stream";
+}
+@grid.GetHtml(
+    columns: grid.Columns(
+        grid.Column("CustomerID", "ID"),
+        grid.Column("CompanyName", "Company Name"),
+        grid.Column("ContactName", "Contact Name"),
+        grid.Column("Address"),
+        grid.Column("City"),
+        grid.Column("Country"),
+        grid.Column("Phone")
+    )
+)
